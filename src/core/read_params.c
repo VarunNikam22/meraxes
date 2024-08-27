@@ -10,6 +10,11 @@ static void check_problem_params(run_params_t* run_params)
     ABORT(EXIT_FAILURE);
   }
 
+  if (run_params->Flag_SeparateQSOXrays != 0) {
+    mlog_error("The current version of the code only works if Flag_SeparateQSOXrays = 0. Sorry! Exiting...");
+    ABORT(EXIT_FAILURE);
+  }
+
   if (strlen(run_globals.params.ForestIDFile) != 0) {
     mlog("*** YOU HAVE PROVIDED A REQUESTED FORESTID FILE. THIS FEATURE HAS NOT BE WELL TESTED. YMMV! ***", MLOG_MESG);
   }
@@ -903,6 +908,11 @@ void read_parameter_file(char* fname, int mode)
       required_tag[n_param] = 1;
       params_type[n_param++] = PARAM_TYPE_DOUBLE;
 
+      strncpy(params_tag[n_param], "Flag_SeparateQSOXrays", tag_length);
+      params_addr[n_param] = &(run_params->Flag_SeparateQSOXrays);
+      required_tag[n_param] = 1;
+      params_type[n_param++] = PARAM_TYPE_INT;
+
       strncpy(params_tag[n_param], "Flag_OutputGrids", tag_length);
       params_addr[n_param] = &(run_params->Flag_OutputGrids);
       required_tag[n_param] = 1;
@@ -1092,6 +1102,16 @@ void read_parameter_file(char* fname, int mode)
 #else
       required_tag[n_param] = 0;
 #endif
+      params_type[n_param++] = PARAM_TYPE_DOUBLE;
+
+      strcpy(params_tag[n_param], "NuXrayQSOThreshold");
+      params_addr[n_param] = &(run_params->physics).NuXrayQSOThreshold;
+      required_tag[n_param] = 1;
+      params_type[n_param++] = PARAM_TYPE_DOUBLE;
+
+      strcpy(params_tag[n_param], "SpecIndexXrayQSO");
+      params_addr[n_param] = &(run_params->physics).SpecIndexXrayQSO;
+      required_tag[n_param] = 1;
       params_type[n_param++] = PARAM_TYPE_DOUBLE;
 
       strcpy(params_tag[n_param], "NuXraySoftCut");
