@@ -415,6 +415,10 @@ void init_reion_grids()
 #if USE_MINI_HALOS
       grids->SMOOTHED_SFR_III[ii] = 0.0;
 #endif
+
+      if (run_globals.params.Flag_SeparateQSOXrays) {
+        grids->SMOOTHED_SFR_QSO[ii] = 0.0;
+      }
     }
   }
 
@@ -605,6 +609,7 @@ void malloc_reionization_grids()
   grids->x_e_filtered = NULL;
 
   grids->SMOOTHED_SFR_GAL = NULL;
+  grids->SMOOTHED_SFR_QSO = NULL;
 
 #if USE_MINI_HALOS
   grids->Tk_boxII = NULL;
@@ -854,6 +859,10 @@ void malloc_reionization_grids()
 
       grids->SMOOTHED_SFR_III = calloc((size_t)slab_n_real_smoothedSFR, sizeof(double));
 #endif
+
+      if (run_globals.params.Flag_SeparateQSOXrays) {
+        grids->SMOOTHED_SFR_QSO = calloc((size_t)slab_n_real_smoothedSFR, sizeof(double));
+      }
     }
 
     if (run_globals.params.Flag_IncludeRecombinations) {
@@ -1022,6 +1031,7 @@ void free_reionization_grids()
   }
 
   if (run_globals.params.Flag_IncludeSpinTemp) {
+    free(grids->SMOOTHED_SFR_QSO);
     free(grids->SMOOTHED_SFR_GAL);
 #if USE_MINI_HALOS
     free(grids->SMOOTHED_SFR_III);
